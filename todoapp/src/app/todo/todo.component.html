@@ -1,0 +1,91 @@
+<div class="logout-container">
+    <button (click)="logout()" class="btn btn-danger logout-button">Logout</button>
+</div>
+
+<h2 class="page-title">Todo List</h2>
+
+<form (ngSubmit)="addTask()" #taskForm="ngForm" class="task-form">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" [(ngModel)]="task.title" #name="ngModel" required
+            class="form-control" placeholder="Enter task title" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description" [(ngModel)]="task.description" #desc="ngModel" required
+            class="form-control" placeholder="Enter task description" />
+    </div>
+
+    <div class="form-group">
+        <label for="status">Task Status</label><br />
+        <label>
+            <input type="radio" name="status" [(ngModel)]="task.status" value="pending" /> Pending
+        </label>
+        <label>
+            <input type="radio" name="status" [(ngModel)]="task.status" value="completed" /> Completed
+        </label>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary btn-block">Add Task</button>
+</form>
+
+<!-- Task Table -->
+<table *ngIf="tasks && tasks.length > 0" class="task-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let task of tasks; let i = index">
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>
+                {{ task.status }}
+            </td>
+            <td>
+                <button (click)="openUpdateModal(task)" class="btn btn-warning">Update</button>
+                <button (click)="deleteTask(task._id)" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p *ngIf="!tasks || tasks.length === 0" class="no-tasks">No tasks available.</p>
+
+<div *ngIf="isModalOpen" class="modal-overlay">
+    <div class="modal">
+        <h2>Update Task</h2>
+        <form (ngSubmit)="updateTask()" #updateTaskForm="ngForm">
+            <div class="form-group">
+                <label for="updateTitle">Title</label>
+                <input type="text" id="updateTitle" [(ngModel)]="taskToUpdate.title" name="title" required
+                    class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="updateDescription">Description</label>
+                <input type="text" id="updateDescription" [(ngModel)]="taskToUpdate.description" name="description"
+                    required class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="updateStatus">Status</label><br />
+                <label>
+                    <input type="radio" [(ngModel)]="taskToUpdate.status" name="status" value="pending" /> Pending
+                </label>
+                <label>
+                    <input type="radio" [(ngModel)]="taskToUpdate.status" name="status" value="completed" /> Completed
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+            <button type="button" class="btn btn-secondary btn-block" (click)="closeUpdateModal()">Cancel</button>
+        </form>
+    </div>
+</div>
